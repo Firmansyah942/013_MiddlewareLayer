@@ -90,3 +90,31 @@ app.post('/api/biodata', validateBiodata, async (req, res, next) => {
     next(err);
   }
 });
+
+// PUT: Memperbarui data mahasiswa berdasarkan ID
+app.put('/api/biodata/:id', validateBiodata, async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { nama, nim, kelas } = req.body;
+
+    const query = 'UPDATE biodata SET nama = $1, nim = $2, kelas = $3 WHERE id = $4 RETURNING *';
+    const values = [nama, nim, kelas, id];
+
+    const result = await pool.query(query, values);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        status: 'fail',
+        message: 'Data mahasiswa yang akan di-update tidak ditemukan',
+      });
+    }
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Data mahasiswa berhasil diperbarui',
+      data: result.rows[0],
+    });
+  } catch (err) {
+    next(err);
+  }
+});
