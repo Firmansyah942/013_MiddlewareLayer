@@ -50,3 +50,26 @@ app.get('/api/biodata', async (req, res, next) => {
     next(err); // Meneruskan error ke global error handler
   }
 });
+
+// GET by ID: Mengambil data mahasiswa berdasarkan ID
+app.get('/api/biodata/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await pool.query('SELECT * FROM biodata WHERE id = $1', [id]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        status: 'fail',
+        message: 'Data mahasiswa tidak ditemukan',
+      });
+    }
+
+    res.status(200).json({
+      status: 'success',
+      data: result.rows[0],
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
