@@ -22,3 +22,15 @@ app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
   next();
 });
+
+// 2. Middleware Validasi Input untuk POST dan PUT
+const validateBiodata = (req, res, next) => {
+  const { nama, nim, kelas } = req.body;
+  if (!nama || !nim || !kelas) {
+    return res.status(400).json({
+      status: 'fail',
+      message: 'Validasi gagal: Field nama, nim, dan kelas wajib diisi!',
+    });
+  }
+  next();
+};
