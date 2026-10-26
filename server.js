@@ -118,3 +118,26 @@ app.put('/api/biodata/:id', validateBiodata, async (req, res, next) => {
     next(err);
   }
 });
+
+// DELETE: Menghapus data mahasiswa berdasarkan ID
+app.delete('/api/biodata/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await pool.query('DELETE FROM biodata WHERE id = $1 RETURNING *', [id]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        status: 'fail',
+        message: 'Data mahasiswa yang akan dihapus tidak ditemukan',
+      });
+    }
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Data mahasiswa berhasil dihapus',
+      data: result.rows[0],
+    });
+  } catch (err) {
+    next(err);
+  }
+});
