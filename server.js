@@ -73,3 +73,20 @@ app.get('/api/biodata/:id', async (req, res, next) => {
   }
 });
 
+// POST: Menambahkan data mahasiswa baru
+app.post('/api/biodata', validateBiodata, async (req, res, next) => {
+  try {
+    const { nama, nim, kelas } = req.body;
+    const query = 'INSERT INTO biodata (nama, nim, kelas) VALUES ($1, $2, $3) RETURNING *';
+    const values = [nama, nim, kelas];
+
+    const result = await pool.query(query, values);
+    res.status(201).json({
+      status: 'success',
+      message: 'Data mahasiswa berhasil ditambahkan',
+      data: result.rows[0],
+    });
+  } catch (err) {
+    next(err);
+  }
+});
