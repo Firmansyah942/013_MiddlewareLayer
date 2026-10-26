@@ -141,3 +141,14 @@ app.delete('/api/biodata/:id', async (req, res, next) => {
     next(err);
   }
 });
+
+// 3. Global Error Handling Middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({
+    status: 'error',
+    message: 'Terjadi kesalahan internal pada server',
+    error: err.message,
+  });
+});
+
