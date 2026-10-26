@@ -34,3 +34,17 @@ const validateBiodata = (req, res, next) => {
   }
   next();
 };
+
+// --- ROUTE CRUD ---
+
+// GET: Mengambil semua data mahasiswa
+app.get('/api/biodata', async (req, res, next) => {
+  try {
+    const result = await pool.query('SELECT * FROM biodata ORDER BY id ASC');
+    res.status(200).json({
+      status: 'success',
+      totalData: result.rows.length,
+      data: result.rows,
+    });
+  } catch (err) {
+    
