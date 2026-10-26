@@ -152,3 +152,7 @@ app.use((err, req, res, next) => {
   });
 });
 
+// Menjalankan server pada port yang ditentukan
+app.listen(port, () => {
+  console.log(`Server berjalan di http://localhost:${port}`);
+});
