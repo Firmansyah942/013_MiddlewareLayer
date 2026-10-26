@@ -47,4 +47,6 @@ app.get('/api/biodata', async (req, res, next) => {
       data: result.rows,
     });
   } catch (err) {
-    
+    next(err); // Meneruskan error ke global error handler
+  }
+});
